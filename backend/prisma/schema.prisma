@@ -1,0 +1,185 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+model Employee {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  phone         String?
+  weeklyHours   Int          @default(37)
+  homeLatitude  Float?
+  homeLongitude Float?
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  competencies  Competency[] @relation("EmployeeCompetencies")
+  assignments   Assignment[]
+  routes        Route[]
+  schedules     Schedule[]
+
+  @@map("employees")
+}
+
+model Competency {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  description String?
+  createdAt   DateTime   @default(now())
+
+  employees   Employee[] @relation("EmployeeCompetencies")
+  tasks       Task[]     @relation("TaskCompetencies")
+
+  @@map("competencies")
+}
+
+model Client {
+  id              String   @id @default(cuid())
+  name            String
+  address         String
+  latitude        Float
+  longitude       Float
+  phone           String?
+  notes           String?
+  preferredEmployeeId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tasks           Task[]
+
+  @@map("clients")
+}
+
+model Task {
+  id                   String       @id @default(cuid())
+  title                String
+  description          String?
+  clientId             String
+  durationMinutes      Int          @default(30)
+  windowStart          DateTime?
+  windowEnd            DateTime?
+  priority             Priority     @default(normal)
+  status               TaskStatus   @default(pending)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  client               Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  requiredCompetencies Competency[] @relation("TaskCompetencies")
+  assignment           Assignment?
+
+  @@map("tasks")
+}
+
+model Route {
+  id                   String       @id @default(cuid())
+  employeeId           String
+  date                 DateTime     @db.Date
+  totalDistanceKm      Float?
+  totalDurationMinutes Int?
+  efficiency           Float?
+  status               RouteStatus  @default(planned)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  employee             Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  assignments          Assignment[]
+
+  @@unique([employeeId, date])
+  @@map("routes")
+}
+
+model Assignment {
+  id            String           @id @default(cuid())
+  routeId       String
+  employeeId    String
+  taskId        String           @unique
+  startTime     DateTime
+  endTime       DateTime
+  routeOrder    Int
+  travelMinutes Int?
+  isLocked      Boolean          @default(false)
+  status        AssignmentStatus @default(pending)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  route         Route            @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  employee      Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  task          Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("assignments")
+}
+
+model Schedule {
+  id              String   @id @default(cuid())
+  employeeId      String
+  weekStart       DateTime @db.Date
+  plannedHours    Float
+  actualHours     Float?
+  overtime        Float?
+  complianceStatus ComplianceStatus @default(ok)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, weekStart])
+  @@map("schedules")
+}
+
+model WorkTimeLog {
+  id           String   @id @default(cuid())
+  employeeId   String
+  date         DateTime @db.Date
+  startTime    DateTime
+  endTime      DateTime?
+  breakMinutes Int      @default(0)
+  totalMinutes Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("work_time_logs")
+}
+
+enum Priority {
+  low
+  normal
+  high
+  urgent
+}
+
+enum TaskStatus {
+  pending
+  assigned
+  in_progress
+  completed
+  cancelled
+}
+
+enum RouteStatus {
+  planned
+  in_progress
+  completed
+  cancelled
+}
+
+enum AssignmentStatus {
+  pending
+  in_progress
+  completed
+  skipped
+  cancelled
+}
+
+enum ComplianceStatus {
+  ok
+  warning
+  violation
+}
