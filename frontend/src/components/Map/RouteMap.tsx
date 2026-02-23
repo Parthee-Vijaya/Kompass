@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import type { Route, Assignment, Employee } from '@/services/api'
+import type { Route, Assignment } from '@/services/api'
 
 interface RouteMapProps {
   routes: Route[]
@@ -15,13 +15,6 @@ const EMPLOYEE_COLORS = [
   '#0ea5e9', '#f59e0b', '#10b981', '#8b5cf6',
   '#ef4444', '#ec4899', '#06b6d4', '#84cc16',
 ]
-
-const defaultIcon = L.divIcon({
-  className: 'custom-marker',
-  html: `<div style="background:#6b7280;width:24px;height:24px;border-radius:50%;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3)"></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-})
 
 function createEmployeeIcon(color: string, isSelected: boolean) {
   const size = isSelected ? 32 : 24

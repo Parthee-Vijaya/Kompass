@@ -1,6 +1,6 @@
-# Tasks: Plaain - Intelligent Workforce Scheduling & Route Planning
+# Tasks: Kompass - Intelligent Workforce Scheduling & Route Planning
 
-**PRD Reference:** `0001-prd-plaain-workforce-routing.md`  
+**PRD Reference:** `0001-prd-kompass-workforce-routing.md`  
 **Genereret:** 20. februar 2026  
 **Estimeret Scope:** MVP (Fase 1 + dele af Fase 2)
 

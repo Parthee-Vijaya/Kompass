@@ -37,11 +37,11 @@ async function main() {
 
   const employees = await Promise.all([
     prisma.employee.upsert({
-      where: { email: 'anna@plaain.dk' },
+      where: { email: 'anna@kompass.dk' },
       update: {},
       create: {
         name: 'Anna Andersen',
-        email: 'anna@plaain.dk',
+        email: 'anna@kompass.dk',
         phone: '+45 12 34 56 78',
         weeklyHours: 37,
         homeLatitude: 55.6761,
@@ -52,11 +52,11 @@ async function main() {
       },
     }),
     prisma.employee.upsert({
-      where: { email: 'bo@plaain.dk' },
+      where: { email: 'bo@kompass.dk' },
       update: {},
       create: {
         name: 'Bo Bertelsen',
-        email: 'bo@plaain.dk',
+        email: 'bo@kompass.dk',
         phone: '+45 23 45 67 89',
         weeklyHours: 37,
         homeLatitude: 55.6850,
@@ -67,11 +67,11 @@ async function main() {
       },
     }),
     prisma.employee.upsert({
-      where: { email: 'carla@plaain.dk' },
+      where: { email: 'carla@kompass.dk' },
       update: {},
       create: {
         name: 'Carla Christensen',
-        email: 'carla@plaain.dk',
+        email: 'carla@kompass.dk',
         phone: '+45 34 56 78 90',
         weeklyHours: 30,
         homeLatitude: 55.6700,
@@ -82,11 +82,11 @@ async function main() {
       },
     }),
     prisma.employee.upsert({
-      where: { email: 'david@plaain.dk' },
+      where: { email: 'david@kompass.dk' },
       update: {},
       create: {
         name: 'David Dalsgaard',
-        email: 'david@plaain.dk',
+        email: 'david@kompass.dk',
         phone: '+45 45 67 89 01',
         weeklyHours: 37,
         homeLatitude: 55.6900,
@@ -257,6 +257,165 @@ async function main() {
   ])
 
   console.log(`✅ Created ${tasks.length} tasks`)
+
+  // --- Udvidet mockdata: flere klienter, opgaver og ruter for dashboard/grafer ---
+  const existingClientCount = await prisma.client.count()
+  if (existingClientCount >= 20) {
+    console.log('⏭️ Mockdata findes allerede, springer ekstra data over')
+  } else {
+  const personligPleje = competencies.find((c) => c.name === 'Personlig pleje')!
+  const medicin = competencies.find((c) => c.name === 'Medicinhåndtering')!
+  const rengoring = competencies.find((c) => c.name === 'Rengøring')!
+  const anna = employees.find((e) => e.email === 'anna@kompass.dk')!
+  const bo = employees.find((e) => e.email === 'bo@kompass.dk')!
+  const carla = employees.find((e) => e.email === 'carla@kompass.dk')!
+  const david = employees.find((e) => e.email === 'david@kompass.dk')!
+
+  const extraClients = [
+    { name: 'Karen Kjeldsen', address: 'Jagtvej 88, 2200 København N', lat: 55.698, lng: 12.552 },
+    { name: 'Lars Lund', address: 'Sønder Blvd 72, 1720 København V', lat: 55.678, lng: 12.538 },
+    { name: 'Mette Mikkelsen', address: 'Nordhavnsvej 4, 2150 København', lat: 55.708, lng: 12.598 },
+    { name: 'Niels Nielsen', address: 'Gammel Kongevej 120, 1850 Frederiksberg', lat: 55.678, lng: 12.538 },
+    { name: 'Oda Olsen', address: 'Amagerbrogade 88, 2300 København S', lat: 55.662, lng: 12.608 },
+    { name: 'Poul Pedersen', address: 'Vester Voldgade 12, 1552 København', lat: 55.678, lng: 12.568 },
+    { name: 'Ruth Rasmussen', address: 'Nørre Farimagsgade 45, 1364 København', lat: 55.686, lng: 12.565 },
+    { name: 'Søren Sørensen', address: 'Islands Brygge 42, 2300 København S', lat: 55.658, lng: 12.588 },
+    { name: 'Tina Thomsen', address: 'Blegdamsvej 6, 2200 København N', lat: 55.695, lng: 12.568 },
+    { name: 'Ulla Ulrich', address: 'Falkoner Allé 77, 2000 Frederiksberg', lat: 55.682, lng: 12.538 },
+    { name: 'Viggo Vestergaard', address: 'Øresundsvej 22, 2300 København S', lat: 55.655, lng: 12.618 },
+    { name: 'Yrsa Yde', address: 'Linnésgade 18, 1361 København', lat: 55.688, lng: 12.572 },
+    { name: 'Axel Andersen', address: 'Strandvejen 98, 2900 Hellerup', lat: 55.732, lng: 12.578 },
+    { name: 'Bodil Bjerre', address: 'Roskildevej 200, 2620 Albertslund', lat: 55.658, lng: 12.348 },
+    { name: 'Claus Carlsen', address: 'Lyngby Hovedgade 45, 2800 Kgs. Lyngby', lat: 55.772, lng: 12.502 },
+  ]
+
+  for (const c of extraClients) {
+    await prisma.client.upsert({
+      where: { id: `mock-${c.name.replace(/\s/g, '-').toLowerCase()}` },
+      update: {},
+      create: {
+        id: `mock-${c.name.replace(/\s/g, '-').toLowerCase()}`,
+        name: c.name,
+        address: c.address,
+        latitude: c.lat,
+        longitude: c.lng,
+        phone: '+45 00 00 00 00',
+      },
+    })
+  }
+
+  const allClientsForTasks = await prisma.client.findMany({ take: 25 })
+  const todayStart = new Date(today)
+  todayStart.setHours(0, 0, 0, 0)
+
+  for (let d = -6; d <= 0; d++) {
+    const date = new Date(todayStart)
+    date.setDate(date.getDate() + d)
+    const dayStart = new Date(date)
+    dayStart.setHours(8, 0, 0, 0)
+    const numTasks = d === 0 ? 18 : d === -1 ? 12 : 6
+    for (let i = 0; i < numTasks; i++) {
+      const client = allClientsForTasks[i % allClientsForTasks.length]
+      if (!client) continue
+      const windowStart = new Date(dayStart)
+      windowStart.setHours(8 + (i % 6), (i % 4) * 15, 0, 0)
+      const windowEnd = new Date(windowStart)
+      windowEnd.setHours(17, 0, 0, 0)
+      await prisma.task.create({
+        data: {
+          title: ['Morgenpleje', 'Medicin', 'Rengøring', 'Besøg', 'Sårpleje', 'Indkøb'][i % 6],
+          clientId: client.id,
+          durationMinutes: [30, 45, 60, 20, 40][i % 5],
+          windowStart,
+          windowEnd,
+          priority: ['low', 'normal', 'high', 'urgent'][i % 4] as 'low' | 'normal' | 'high' | 'urgent',
+          status: d < 0 ? 'completed' : i % 3 === 0 ? 'completed' : 'pending',
+          requiredCompetencies: {
+            connect: [{ id: [personligPleje.id, medicin.id, rengoring.id][i % 3] }],
+          },
+        },
+      })
+    }
+  }
+  console.log('✅ Created extra mock tasks for 7 days')
+
+  const todayDate = new Date(todayStart)
+  const empIds = [anna.id, bo.id, carla.id]
+  const tasksToday = await prisma.task.findMany({
+    where: {
+      windowStart: { gte: todayDate, lt: new Date(todayDate.getTime() + 24 * 60 * 60 * 1000) },
+    },
+    include: { client: true },
+    take: 24,
+  })
+
+  for (let e = 0; e < 3; e++) {
+    const employeeId = empIds[e]
+    const route = await prisma.route.upsert({
+      where: {
+        employeeId_date: { employeeId, date: todayDate },
+      },
+      create: {
+        employeeId,
+        date: todayDate,
+        totalDistanceKm: 28 + e * 5,
+        totalDurationMinutes: 360 + e * 30,
+        efficiency: 0.72 + e * 0.06,
+        status: 'planned',
+      },
+      update: {
+        totalDistanceKm: 28 + e * 5,
+        totalDurationMinutes: 360 + e * 30,
+        efficiency: 0.72 + e * 0.06,
+      },
+    })
+    const myTasks = tasksToday.filter((_, i) => i % 3 === e)
+    let mins = 8 * 60
+    for (let o = 0; o < myTasks.length; o++) {
+      const task = myTasks[o]
+      const startTime = new Date(todayDate)
+      startTime.setHours(0, 0, 0, 0)
+      startTime.setMinutes(mins)
+      const endTime = new Date(startTime)
+      endTime.setMinutes(mins + task.durationMinutes + 15)
+      mins = mins + task.durationMinutes + 25
+      await prisma.assignment.upsert({
+        where: { taskId: task.id },
+        create: {
+          routeId: route.id,
+          employeeId,
+          taskId: task.id,
+          startTime,
+          endTime,
+          routeOrder: o,
+          travelMinutes: 15,
+          status: o < 2 ? 'completed' : 'pending',
+        },
+        update: {},
+      })
+    }
+  }
+  console.log('✅ Created 3 routes with assignments for today')
+
+  for (let d = -5; d <= -1; d++) {
+    const date = new Date(todayStart)
+    date.setDate(date.getDate() + d)
+    const empId = empIds[Math.abs(d) % 3]
+    await prisma.route.upsert({
+      where: { employeeId_date: { employeeId: empId, date } },
+      create: {
+        employeeId: empId,
+        date,
+        totalDistanceKm: 22 + Math.abs(d) * 2,
+        totalDurationMinutes: 320,
+        efficiency: 0.68 + Math.abs(d) * 0.02,
+        status: 'completed',
+      },
+      update: {},
+    })
+  }
+  console.log('✅ Created historical routes for efficiency trend')
+  }
 
   console.log('🎉 Seeding completed!')
 }

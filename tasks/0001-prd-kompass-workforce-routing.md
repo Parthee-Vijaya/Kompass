@@ -1,4 +1,4 @@
-# PRD: Plaain - Intelligent Workforce Scheduling & Route Planning
+# PRD: Kompass - Intelligent Workforce Scheduling & Route Planning
 
 **Version:** 1.0  
 **Dato:** 20. februar 2026  
@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary
 
-Plaain er en intelligent planlægningsplatform der kombinerer **ruteplanlægning** og **bemandingsplanlægning** i én sammenhængende løsning. Systemet understøtter planlæggere med avancerede algoritmer, mens mennesket bevarer kontrollen over de vigtige beslutninger.
+Kompass er en intelligent planlægningsplatform der kombinerer **ruteplanlægning** og **bemandingsplanlægning** i én sammenhængende løsning. Systemet understøtter planlæggere med avancerede algoritmer, mens mennesket bevarer kontrollen over de vigtige beslutninger.
 
 ### Vision
 *"Teknologi der understøtter, ikke erstatter den erfarne planlægger"*
@@ -397,4 +397,4 @@ Infrastructure:
 
 ---
 
-*Dokumentet er udarbejdet som grundlag for implementering af Plaain workforce scheduling platform.*
+*Dokumentet er udarbejdet som grundlag for implementering af Kompass workforce scheduling platform.*

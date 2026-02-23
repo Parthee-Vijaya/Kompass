@@ -1,1 +1,1 @@
-# Plaain Optimizer Service
+# Kompass Optimizer Service

@@ -56,9 +56,12 @@ io.on('connection', (socket) => {
   })
 })
 
-export { io }
+export { app, io, httpServer }
 
-httpServer.listen(config.PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${config.PORT}`)
-  console.log(`📡 WebSocket server ready`)
-})
+const isTest = typeof process !== 'undefined' && process.env?.VITEST === 'true'
+if (!isTest) {
+  httpServer.listen(config.PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${config.PORT}`)
+    console.log(`📡 WebSocket server ready`)
+  })
+}

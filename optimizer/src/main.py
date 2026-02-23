@@ -8,7 +8,7 @@ from .vrp_solver import VRPSolver
 from .models import OptimizeRequest, OptimizeResponse
 
 app = FastAPI(
-    title="Plaain Optimizer",
+    title="Kompass Optimizer",
     description="VRP Optimization Service for Workforce Scheduling",
     version="0.1.0",
 )

@@ -1,4 +1,4 @@
-# Plaain – Testguide
+# Kompass – Testguide
 
 ## Hurtig test (nuværende status)
 

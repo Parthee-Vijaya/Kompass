@@ -1,12 +1,12 @@
 services:
   postgres:
     image: postgis/postgis:16-3.4
-    container_name: plaain-postgres
+    container_name: kompass-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: plaain
+      POSTGRES_DB: kompass
     ports:
       - "5433:5432"
     volumes:
@@ -19,7 +19,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: plaain-redis
+    container_name: kompass-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -35,7 +35,7 @@ services:
     build:
       context: ./optimizer
       dockerfile: Dockerfile
-    container_name: plaain-optimizer
+    container_name: kompass-optimizer
     restart: unless-stopped
     ports:
       - "8001:8001"

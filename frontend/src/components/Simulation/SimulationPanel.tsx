@@ -20,7 +20,7 @@ interface SimulationScenario {
 
 export function SimulationPanel({
   employees,
-  date,
+  date: _date,
   onSimulate,
   onApply,
   onClose,

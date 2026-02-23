@@ -1,5 +1,5 @@
 {
-  "name": "plaain",
+  "name": "kompass",
   "version": "0.1.0",
   "private": true,
   "description": "Intelligent Workforce Scheduling & Route Planning Platform",
@@ -45,6 +45,6 @@
     "vrp",
     "optimization"
   ],
-  "author": "Plaain",
+  "author": "Kompass",
   "license": "UNLICENSED"
 }

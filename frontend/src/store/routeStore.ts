@@ -22,7 +22,7 @@ interface RouteState {
   refreshAll: (date: string) => Promise<void>
 }
 
-const formatDate = (date: Date) => date.toISOString().split('T')[0]
+const formatDate = (date: Date): string => date.toISOString().slice(0, 10)
 
 export const useRouteStore = create<RouteState>((set, get) => ({
   routes: [],

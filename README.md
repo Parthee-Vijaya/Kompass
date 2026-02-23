@@ -1,4 +1,4 @@
-# Plaain - Intelligent Workforce Scheduling & Route Planning
+# Kompass - Intelligent Workforce Scheduling & Route Planning
 
 En moderne planlægningsplatform der kombinerer **ruteplanlægning** og **bemandingsplanlægning** i én sammenhængende løsning.
 
@@ -24,7 +24,7 @@ En moderne planlægningsplatform der kombinerer **ruteplanlægning** og **bemand
 ## 🏗 Arkitektur
 
 ```
-plaain/
+kompass/
 ├── frontend/          # React 19 + TypeScript + Vite
 │   └── src/
 │       ├── components/  # UI komponenter
@@ -57,7 +57,7 @@ plaain/
 
 ```bash
 git clone <repository-url>
-cd plaain
+cd kompass
 ```
 
 ### 2. Installer dependencies
@@ -221,8 +221,8 @@ Optimizer timeout og parametre kan justeres i `/api/optimize` request:
 
 ## 📖 Dokumentation
 
-- [PRD (Product Requirements Document)](./tasks/0001-prd-plaain-workforce-routing.md)
-- [Task Liste](./tasks/tasks-plaain-workforce-routing.md)
+- [PRD (Product Requirements Document)](./tasks/0001-prd-kompass-workforce-routing.md)
+- [Task Liste](./tasks/tasks-kompass-workforce-routing.md)
 
 ## 🤝 Bidrag
 
@@ -237,5 +237,5 @@ Proprietary - Alle rettigheder forbeholdes
 
 ---
 
-**Plaain** - Grundlagt 2024  
+**Kompass** - Grundlagt 2024  
 *Erfaring møder innovation*
