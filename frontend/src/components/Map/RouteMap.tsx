@@ -56,7 +56,7 @@ export function RouteMap({
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return
 
-    const map = L.map(mapRef.current).setView([55.6761, 12.5683], 12)
+    const map = L.map(mapRef.current).setView([55.6761, 11.0886], 12)
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors',
